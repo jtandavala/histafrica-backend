@@ -1,5 +1,6 @@
 from abc import ABC
-from dataclasses import asdict, dataclass, field
+from dataclasses import Field, asdict, dataclass, field
+from typing import Any
 
 from histafrica.shared.domain.value_objects import UniqueEntityId
 
@@ -14,6 +15,10 @@ class Entity(ABC):
     def id(self):
         return str(self.unique_entity_id)
 
+    def _set(self, name: str, value: Any):
+        object.__setattr__(self, name, value)
+        return self
+
     def to_dict(self):
         entity_dict = asdict(self)
         entity_dict.pop("unique_entity_id")
@@ -21,5 +26,5 @@ class Entity(ABC):
         return entity_dict
 
     @classmethod
-    def get_field(cls, entity_fied: str) -> field:
+    def get_field(cls, entity_fied: str) -> Field:
         return cls.__dataclass_fields__[entity_fied]
