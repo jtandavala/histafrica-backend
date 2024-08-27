@@ -1,14 +1,14 @@
 from abc import ABC
-from dataclasses import Field, dataclass, field, asdict
-from typing import Any
+from dataclasses import asdict, dataclass, field
 
 from histafrica.shared.domain.value_objects import UniqueEntityId
+
 
 @dataclass(frozen=True, slots=True)
 class Entity(ABC):
     unique_entity_id: UniqueEntityId = field(
-            default_factory=lambda: UniqueEntityId()  # pylint: disable=unnecessary-lambda
-        )
+        default_factory=lambda: UniqueEntityId()  # pylint: disable=unnecessary-lambda
+    )
 
     @property
     def id(self):
@@ -16,8 +16,8 @@ class Entity(ABC):
 
     def to_dict(self):
         entity_dict = asdict(self)
-        entity_dict.pop('unique_entity_id')
-        entity_dict['id'] = self.id
+        entity_dict.pop("unique_entity_id")
+        entity_dict["id"] = self.id
         return entity_dict
 
     @classmethod
