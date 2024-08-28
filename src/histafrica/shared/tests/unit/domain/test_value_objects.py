@@ -2,7 +2,7 @@ import unittest
 from abc import ABC
 from dataclasses import FrozenInstanceError, dataclass, is_dataclass
 
-from histafrica.shared.domain.value_objects import ValueObject
+from histafrica.shared.domain.value_objects import UniqueEntityId, ValueObject
 
 
 @dataclass(frozen=True)
@@ -43,3 +43,8 @@ class TestValueObjectUnit(unittest.TestCase):
         with self.assertRaises(FrozenInstanceError):
             value_object = StubOneProp(prop="value")
             value_object.prop = "fake"
+
+
+class TestUniqueEntityId(unittest.TestCase):
+    def test_if_is_a_dataclass(self):
+        self.assertTrue(is_dataclass(UniqueEntityId))
