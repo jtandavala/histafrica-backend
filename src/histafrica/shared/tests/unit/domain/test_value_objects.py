@@ -1,7 +1,9 @@
 import unittest
 from abc import ABC
 from dataclasses import FrozenInstanceError, dataclass, is_dataclass
+from unittest.mock import patch
 
+from histafrica.shared.domain.exceptions import InvalidUuidException
 from histafrica.shared.domain.value_objects import UniqueEntityId, ValueObject
 
 
@@ -48,3 +50,15 @@ class TestValueObjectUnit(unittest.TestCase):
 class TestUniqueEntityId(unittest.TestCase):
     def test_if_is_a_dataclass(self):
         self.assertTrue(is_dataclass(UniqueEntityId))
+
+    def test_throw_exception_when_uuid_is_invalid(self):
+        with patch.object(
+            UniqueEntityId,
+            "_UniqueEntityId__validate",
+            autospec=True,
+            side_effect=UniqueEntityId._UniqueEntityId__validate,
+        ) as mock_validate:
+            with self.assertRaises(InvalidUuidException) as assert_error:
+                UniqueEntityId("fake id")
+            mock_validate.assert_called_once()
+            self.assertEqual(assert_error.exception.args[0], "ID must be a valid UUID")
