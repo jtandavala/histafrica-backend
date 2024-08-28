@@ -1,4 +1,5 @@
 import unittest
+import uuid
 from abc import ABC
 from dataclasses import FrozenInstanceError, dataclass, is_dataclass
 from unittest.mock import patch
@@ -62,3 +63,14 @@ class TestUniqueEntityId(unittest.TestCase):
                 UniqueEntityId("fake id")
             mock_validate.assert_called_once()
             self.assertEqual(assert_error.exception.args[0], "ID must be a valid UUID")
+
+    def test_generate_id_when_pass_no_id_in_constroctor(self):
+        with patch.object(
+            UniqueEntityId,
+            "_UniqueEntityId__validate",
+            autospec=True,
+            side_affect=UniqueEntityId._UniqueEntityId__validate,
+        ) as mock_validate:
+            value_object = UniqueEntityId()
+            uuid.UUID(value_object.id)
+            mock_validate.assert_called_once()
