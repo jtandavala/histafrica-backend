@@ -20,3 +20,15 @@ class TestValidatorRules(unittest.TestCase):
             with self.assertRaises(ValidationException, msg=msg) as assert_error:
                 ValidatorRules.values(i["value"], i["prop"]).required()
                 self.assertEqual("The prop is required", assert_error.exception.args[0])
+
+        valid_data = [
+            {"value": "test", "prop": "prop"},
+            {"value": 5, "prop": "prop"},
+            {"value": 0, "prop": "prop"},
+            {"value": False, "prop": "prop"},
+        ]
+
+        for i in valid_data:
+            self.assertIsInstance(
+                ValidatorRules.values(i["value"], i["prop"]).required(), ValidatorRules
+            )
