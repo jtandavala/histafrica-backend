@@ -20,6 +20,14 @@ pytest-cov = "^5.0.0"
 pre-commit = "^3.8.0"
 pylint = "^3.2.6"
 
+[tool.isort]
+profile = "black"  # Or any other profile like "django", "google"
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+combine_as_imports = true
+line_length = 79
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
