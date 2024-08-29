@@ -19,7 +19,7 @@ class ValidatorRules:
 
     def required(self) -> "ValidatorRules":
         if self.value is None or self.value == "":
-            raise ValidationException(f"The {self.prop} is required")
+            raise ValidationException(f"The {self.prop} must be a string")
         return self
 
     def string(self) -> "ValidatorRules":
