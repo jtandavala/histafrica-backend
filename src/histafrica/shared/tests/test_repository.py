@@ -7,6 +7,7 @@ from histafrica.shared.domain.repository import (
     InMemoryRepository,
     RepositoryInterface,
 )
+from histafrica.shared.domain.value_objects import UniqueEntityId
 
 
 class TestRepositoryInterface(unittest.TestCase):
@@ -51,4 +52,12 @@ class TestInMemoryRepository(unittest.TestCase):
             self.repo.find_by_id("fake id")
         self.assertEqual(
             assert_error.exception.args[0], "Entity not found using ID 'fake id'"
+        )
+
+        unique_entity_id = UniqueEntityId("af46842e-027d-4c91-b259-3a3642144ba4")
+        with self.assertRaises(NotFoundException) as assert_error:
+            self.repo.find_by_id(unique_entity_id)
+        self.assertEqual(
+            assert_error.exception.args[0],
+            "Entity not found using ID 'af46842e-027d-4c91-b259-3a3642144ba4'",
         )
