@@ -49,7 +49,7 @@ class InMemoryRepository(RepositoryInterface[ET], ABC):
         return self._get(str(entity_id))
 
     def find_all(self) -> List[ET]:
-        pass
+        return self.items
 
     def update(self, entity: ET) -> None:
         pass

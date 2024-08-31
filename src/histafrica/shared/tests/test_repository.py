@@ -71,3 +71,9 @@ class TestInMemoryRepository(unittest.TestCase):
 
         entity_found = self.repo.find_by_id(entity.unique_entity_id)
         self.assertEqual(entity_found, entity)
+
+    def test_find_all(self):
+        entity = StubEntity(name="test", price=5)
+        self.repo.insert(entity)
+        items = self.repo.find_all()
+        self.assertEqual(items, [entity])
