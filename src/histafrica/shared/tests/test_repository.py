@@ -39,3 +39,8 @@ class TestInMemoryRepository(unittest.TestCase):
 
     def test_items_prop_is_empty_on_init(self):
         self.assertEqual(self.repo.items, [])
+
+    def test_insert(self):
+        entity = StubEntity(name="test", price=5)
+        self.repo.insert(entity)
+        self.assertEqual(self.repo.items[0], entity)

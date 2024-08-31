@@ -39,7 +39,7 @@ class InMemoryRepository(RepositoryInterface[ET], ABC):
     items: List[ET] = field(default_factory=lambda: [])
 
     def insert(self, entity: ET) -> None:
-        pass
+        self.items.append(entity)
 
     def bulk_insert(self, entities: List[ET]) -> None:
         pass
