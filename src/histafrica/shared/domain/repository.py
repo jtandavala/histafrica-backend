@@ -52,7 +52,9 @@ class InMemoryRepository(RepositoryInterface[ET], ABC):
         return self.items
 
     def update(self, entity: ET) -> None:
-        pass
+        entity_found = self._get(entity.id)
+        index = self.items.index(entity_found)
+        self.items[index] = entity
 
     def delete(self, entoty: ET) -> None:
         pass
