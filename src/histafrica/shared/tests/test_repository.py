@@ -96,3 +96,11 @@ class TestInMemoryRepository(unittest.TestCase):
         self.repo.update(entity_updated)
 
         self.assertEqual(entity_updated, self.repo.items[0])
+
+    def test_throw_not_found_exception_in_delete(self):
+        entity = StubEntity(name="test", price=5)
+        with self.assertRaises(NotFoundException) as assert_error:
+            self.repo.delete(entity)
+        self.assertEqual(
+            assert_error.exception.args[0], f"Entity not found using ID '{entity.id}'"
+        )
