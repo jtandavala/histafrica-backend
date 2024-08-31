@@ -61,3 +61,13 @@ class TestInMemoryRepository(unittest.TestCase):
             assert_error.exception.args[0],
             "Entity not found using ID 'af46842e-027d-4c91-b259-3a3642144ba4'",
         )
+
+    def test_find_by_id(self):
+        entity = StubEntity(name="test", price=5)
+        self.repo.insert(entity)
+
+        entity_found = self.repo.find_by_id(entity.id)
+        self.assertEqual(entity_found, entity)
+
+        entity_found = self.repo.find_by_id(entity.unique_entity_id)
+        self.assertEqual(entity_found, entity)
