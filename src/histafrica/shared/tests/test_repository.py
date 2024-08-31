@@ -2,6 +2,7 @@ import unittest
 from dataclasses import dataclass
 
 from histafrica.shared.domain.entity import Entity
+from histafrica.shared.domain.exceptions import NotFoundException
 from histafrica.shared.domain.repository import (
     InMemoryRepository,
     RepositoryInterface,
@@ -44,3 +45,10 @@ class TestInMemoryRepository(unittest.TestCase):
         entity = StubEntity(name="test", price=5)
         self.repo.insert(entity)
         self.assertEqual(self.repo.items[0], entity)
+
+    def test_throw_not_found_exception_in_find_by_id(self):
+        with self.assertRaises(NotFoundException) as assert_error:
+            self.repo.find_by_id("fake id")
+        self.assertEqual(
+            assert_error.exception.args[0], "Entity not found using ID 'fake id'"
+        )
