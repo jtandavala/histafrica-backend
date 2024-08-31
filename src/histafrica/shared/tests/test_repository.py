@@ -6,6 +6,7 @@ from histafrica.shared.domain.exceptions import NotFoundException
 from histafrica.shared.domain.repository import (
     InMemoryRepository,
     RepositoryInterface,
+    SearchableRepositoryInterface,
 )
 from histafrica.shared.domain.value_objects import UniqueEntityId
 
@@ -103,4 +104,24 @@ class TestInMemoryRepository(unittest.TestCase):
             self.repo.delete(entity)
         self.assertEqual(
             assert_error.exception.args[0], f"Entity not found using ID '{entity.id}'"
+        )
+
+    def test_delete(self):
+        entity = StubEntity(name="test", price=5)
+        self.repo.insert(entity)
+
+        self.repo.delete(entity)
+        self.assertEqual(self.repo.items, [])
+
+
+class TestSearchableRepositoryInterface(unittest.TestCase):
+
+    def test_throw_error_when_methods_not_implemented(self):
+        with self.assertRaises(TypeError) as assert_error:
+            SearchableRepositoryInterface()
+        self.assertEqual(
+            "Can't instantiate abstract class SearchableRepositoryInterface "
+            + "with abstract methods delete, find_all, find_by_id, insert,"
+            + "search, update",
+            assert_error.exception.args[0],
         )

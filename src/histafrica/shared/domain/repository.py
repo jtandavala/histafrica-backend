@@ -1,12 +1,15 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import Generic, List, TypeVar
+from typing import Any, Generic, List, TypeVar
 
 from histafrica.shared.domain.entity import Entity
 from histafrica.shared.domain.exceptions import NotFoundException
 from histafrica.shared.domain.value_objects import UniqueEntityId
 
 ET = TypeVar("ET", bound=Entity)
+Filter = TypeVar("Filter", str, Any)
+Input = TypeVar("Input")
+Output = TypeVar("OutPut")
 
 
 class RepositoryInterface(Generic[ET], ABC):
@@ -58,8 +61,7 @@ class InMemoryRepository(RepositoryInterface[ET], ABC):
 
     def delete(self, entity: ET) -> None:
         entity_found = self._get(entity.id)
-        index = self.items.index(entity_found)
-        self.items.remove(index)
+        self.items.remove(entity_found)
 
     def _get(self, entity_id: str) -> ET:
         entity = next(filter(lambda i: i.id == entity_id, self.items), None)
@@ -67,3 +69,13 @@ class InMemoryRepository(RepositoryInterface[ET], ABC):
         if not entity:
             raise NotFoundException(f"Entity not found using ID '{entity_id}'")
         return entity
+
+
+class SearchableRepositoryInterface(
+    Generic[ET, Input, Output], RepositoryInterface[ET], ABC
+):
+    sortable_fields: List[str] = []
+
+    @abstractmethod
+    def search(self, input_params: Input) -> Output:
+        raise NotImplementedError()
