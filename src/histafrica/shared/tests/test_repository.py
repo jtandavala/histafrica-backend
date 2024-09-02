@@ -146,3 +146,26 @@ class TestSearchParams(unittest.TestCase):
                 "filter": Optional[Filter],
             },
         )
+
+    def test_page_prop(self):
+        params = SearchParams()
+        self.assertEqual(params.page, 1)
+
+        arrange = [
+            {"page": None, "expected": 1},
+            {"page": "", "expected": 1},
+            {"page": "fake", "expected": 1},
+            {"page": 0, "expected": 1},
+            {"page": -1, "expected": 1},
+            {"page": "0", "expected": 1},
+            {"page": "-1", "expected": 1},
+            {"page": 5.5, "expected": 5},
+            {"page": True, "expected": 1},
+            {"page": False, "expected": 1},
+            {"page": {}, "expected": 1},
+            {"page": 1, "expected": 1},
+            {"page": 2, "expected": 2},
+        ]
+        for i in arrange:
+            params = SearchParams(page=i["page"])
+            self.assertEqual(params.page, i["expected"], i)

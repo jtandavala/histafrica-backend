@@ -89,7 +89,7 @@ class SearchParams(Generic[Filter]):
     sort_dir: Optional[str] = None
     filter: Optional[Filter] = None
 
-    def __post__init__(self):
+    def __post_init__(self):
         self._normalize_page()
         self._normalize_per_page()
         self._normalize_sort()
