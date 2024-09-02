@@ -1,12 +1,15 @@
 import unittest
 from dataclasses import dataclass
+from typing import Optional
 
 from histafrica.shared.domain.entity import Entity
 from histafrica.shared.domain.exceptions import NotFoundException
 from histafrica.shared.domain.repository import (
+    Filter,
     InMemoryRepository,
     RepositoryInterface,
     SearchableRepositoryInterface,
+    SearchParams,
 )
 from histafrica.shared.domain.value_objects import UniqueEntityId
 
@@ -128,3 +131,18 @@ class TestSearchableRepositoryInterface(unittest.TestCase):
 
     def test_sortable_fields_prop(self):
         self.assertEqual(SearchableRepositoryInterface.sortable_fields, [])
+
+
+class TestSearchParams(unittest.TestCase):
+
+    def test_props_annotations(self):
+        self.assertEqual(
+            SearchParams.__annotations__,
+            {
+                "page": Optional[int],
+                "per_page": Optional[int],
+                "sort": Optional[str],
+                "sort_dir": Optional[str],
+                "filter": Optional[Filter],
+            },
+        )
