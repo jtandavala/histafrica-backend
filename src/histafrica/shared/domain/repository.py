@@ -1,3 +1,4 @@
+import math
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from typing import Any, Generic, List, Optional, TypeVar
@@ -131,3 +132,30 @@ class SearchParams(Generic[Filter]):
 
     def _get_dataclass_field(self, field_name):
         return SearchParams.__dataclass_fields__[field_name]
+
+
+@dataclass(slots=True, kw_only=True, frozen=True)
+class SearchResult(Generic[ET, Filter]):
+    items: List[ET]
+    total: int
+    current_page: int
+    per_page: int
+    last_page: int = field(init=False)
+    sort: Optional[str] = None
+    sort_dir: Optional[str] = None
+    filter: Optional[Filter] = None
+
+    def __post_init__(self):
+        object.__setattr__(self, "last_page", math.ceil(self.total / self.per_page))
+
+    def to_dict(self):
+        return {
+            "items": self.items,
+            "total": self.total,
+            "current_page": self.current_page,
+            "per_page": self.per_page,
+            "last_page": self.last_page,
+            "sort": self.sort,
+            "sort_dir": self.sort_dir,
+            "filter": self.filter,
+        }

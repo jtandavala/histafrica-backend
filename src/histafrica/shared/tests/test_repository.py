@@ -1,15 +1,17 @@
 import unittest
 from dataclasses import dataclass
-from typing import Optional
+from typing import List, Optional
 
 from histafrica.shared.domain.entity import Entity
 from histafrica.shared.domain.exceptions import NotFoundException
 from histafrica.shared.domain.repository import (
+    ET,
     Filter,
     InMemoryRepository,
     RepositoryInterface,
     SearchableRepositoryInterface,
     SearchParams,
+    SearchResult,
 )
 from histafrica.shared.domain.value_objects import UniqueEntityId
 
@@ -235,3 +237,41 @@ class TestSearchParams(unittest.TestCase):
         for i in arrange:
             params = SearchParams(filter=i["filter"])
             self.assertEqual(params.filter, i["expected"], i)
+
+
+class TestSearchResult(unittest.TestCase):
+
+    def test_props_annotations(self):
+        self.assertEqual(
+            SearchResult.__annotations__,
+            {
+                "items": List[ET],
+                "total": int,
+                "current_page": int,
+                "per_page": int,
+                "last_page": int,
+                "sort": Optional[str],
+                "sort_dir": Optional[str],
+                "filter": Optional[Filter],
+            },
+        )
+
+    def test_constructor(self):
+        entity = StubEntity(name="fake", price=5)
+        result = SearchResult(
+            items=[entity, entity], total=4, current_page=1, per_page=2
+        )
+
+        self.assertDictEqual(
+            result.to_dict(),
+            {
+                "items": [entity, entity],
+                "total": 4,
+                "current_page": 1,
+                "per_page": 2,
+                "last_page": 2,
+                "sort": None,
+                "sort_dir": None,
+                "filter": None,
+            },
+        )
