@@ -1,15 +1,17 @@
 import unittest
 from dataclasses import dataclass
-from typing import Optional
+from typing import List, Optional
 
 from histafrica.shared.domain.entity import Entity
 from histafrica.shared.domain.exceptions import NotFoundException
 from histafrica.shared.domain.repository import (
+    ET,
     Filter,
     InMemoryRepository,
     RepositoryInterface,
     SearchableRepositoryInterface,
     SearchParams,
+    SearchResult,
 )
 from histafrica.shared.domain.value_objects import UniqueEntityId
 
@@ -169,3 +171,139 @@ class TestSearchParams(unittest.TestCase):
         for i in arrange:
             params = SearchParams(page=i["page"])
             self.assertEqual(params.page, i["expected"], i)
+
+    def test_sort_prop(self):
+        params = SearchParams()
+        self.assertIsNone(params.sort)
+
+        arrange = [
+            {"sort": None, "expected": None},
+            {"sort": "", "expected": None},
+            {"sort": "fake", "expected": "fake"},
+            {"sort": 0, "expected": "0"},
+            {"sort": -1, "expected": "-1"},
+            {"sort": "0", "expected": "0"},
+            {"sort": "-1", "expected": "-1"},
+            {"sort": 5.5, "expected": "5.5"},
+            {"sort": True, "expected": "True"},
+            {"sort": False, "expected": "False"},
+            {"sort": {}, "expected": "{}"},
+        ]
+        for i in arrange:
+            params = SearchParams(sort=i["sort"])
+            self.assertEqual(params.sort, i["expected"], i)
+
+    def test_sort_dir_prop(self):
+        params = SearchParams()
+        self.assertIsNone(params.sort_dir)
+
+        params = SearchParams(sort=None)
+        self.assertIsNone(params.sort_dir)
+
+        arrange = [
+            {"sort_dir": None, "expected": "asc"},
+            {"sort_dir": "", "expected": "asc"},
+            {"sort_dir": "fake", "expected": "asc"},
+            {"sort_dir": 0, "expected": "asc"},
+            {"sort_dir": {}, "expected": "asc"},
+            {"sort_dir": "asc", "expected": "asc"},
+            {"sort_dir": "ASC", "expected": "asc"},
+            {"sort_dir": "desc", "expected": "desc"},
+            {"sort_dir": "DESC", "expected": "desc"},
+        ]
+
+        for i in arrange:
+            params = SearchParams(sort="name", sort_dir=i["sort_dir"])
+            self.assertEqual(params.sort_dir, i["expected"], i)
+
+    def test_filter_prop(self):
+        params = SearchParams()
+        self.assertIsNone(params.filter)
+
+        arrange = [
+            {"filter": None, "expected": None},
+            {"filter": "", "expected": None},
+            {"filter": "fake", "expected": "fake"},
+            {"filter": 0, "expected": "0"},
+            {"filter": -1, "expected": "-1"},
+            {"filter": "0", "expected": "0"},
+            {"filter": "-1", "expected": "-1"},
+            {"filter": 5.5, "expected": "5.5"},
+            {"filter": True, "expected": "True"},
+            {"filter": False, "expected": "False"},
+            {"filter": {}, "expected": "{}"},
+        ]
+
+        for i in arrange:
+            params = SearchParams(filter=i["filter"])
+            self.assertEqual(params.filter, i["expected"], i)
+
+
+class TestSearchResult(unittest.TestCase):
+
+    def test_props_annotations(self):
+        self.assertEqual(
+            SearchResult.__annotations__,
+            {
+                "items": List[ET],
+                "total": int,
+                "current_page": int,
+                "per_page": int,
+                "last_page": int,
+                "sort": Optional[str],
+                "sort_dir": Optional[str],
+                "filter": Optional[Filter],
+            },
+        )
+
+    def test_constructor(self):
+        entity = StubEntity(name="fake", price=5)
+        result = SearchResult(
+            items=[entity, entity], total=4, current_page=1, per_page=2
+        )
+
+        self.assertDictEqual(
+            result.to_dict(),
+            {
+                "items": [entity, entity],
+                "total": 4,
+                "current_page": 1,
+                "per_page": 2,
+                "last_page": 2,
+                "sort": None,
+                "sort_dir": None,
+                "filter": None,
+            },
+        )
+
+        result = SearchResult(
+            items=[entity, entity],
+            total=4,
+            current_page=1,
+            per_page=2,
+            sort="name",
+            sort_dir="asc",
+            filter="test",
+        )
+
+        self.assertDictEqual(
+            result.to_dict(),
+            {
+                "items": [entity, entity],
+                "total": 4,
+                "current_page": 1,
+                "per_page": 2,
+                "last_page": 2,
+                "sort": "name",
+                "sort_dir": "asc",
+                "filter": "test",
+            },
+        )
+
+    def test_when_per_page_is_greater_than_total(self):
+        result = SearchResult(items=[], total=4, current_page=1, per_page=15)
+        self.assertEqual(result.last_page, 1)
+
+    def test_when_page_is_less_than_total_and_they_are_not_multiples(self):
+        result = SearchResult(items=[], total=101, current_page=1, per_page=20)
+        self.assertEqual(result.last_page, 6)
