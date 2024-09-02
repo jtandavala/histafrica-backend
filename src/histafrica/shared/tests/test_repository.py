@@ -299,3 +299,7 @@ class TestSearchResult(unittest.TestCase):
                 "filter": "test",
             },
         )
+
+    def test_when_per_page_is_greater_than_total(self):
+        result = SearchResult(items=[], total=4, current_page=1, per_page=15)
+        self.assertEqual(result.last_page, 1)
