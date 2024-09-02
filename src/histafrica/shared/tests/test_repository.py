@@ -275,3 +275,27 @@ class TestSearchResult(unittest.TestCase):
                 "filter": None,
             },
         )
+
+        result = SearchResult(
+            items=[entity, entity],
+            total=4,
+            current_page=1,
+            per_page=2,
+            sort="name",
+            sort_dir="asc",
+            filter="test",
+        )
+
+        self.assertDictEqual(
+            result.to_dict(),
+            {
+                "items": [entity, entity],
+                "total": 4,
+                "current_page": 1,
+                "per_page": 2,
+                "last_page": 2,
+                "sort": "name",
+                "sort_dir": "asc",
+                "filter": "test",
+            },
+        )
