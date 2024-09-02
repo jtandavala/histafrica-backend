@@ -121,7 +121,10 @@ class TestSearchableRepositoryInterface(unittest.TestCase):
             SearchableRepositoryInterface()
         self.assertEqual(
             "Can't instantiate abstract class SearchableRepositoryInterface "
-            + "with abstract methods delete, find_all, find_by_id, insert,"
-            + "search, update",
+            "with abstract "
+            "methods delete, find_all, find_by_id, insert, search, update",
             assert_error.exception.args[0],
         )
+
+    def test_sortable_fields_prop(self):
+        self.assertEqual(SearchableRepositoryInterface.sortable_fields, [])
