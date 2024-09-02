@@ -303,3 +303,7 @@ class TestSearchResult(unittest.TestCase):
     def test_when_per_page_is_greater_than_total(self):
         result = SearchResult(items=[], total=4, current_page=1, per_page=15)
         self.assertEqual(result.last_page, 1)
+
+    def test_when_page_is_less_than_total_and_they_are_not_multiples(self):
+        result = SearchResult(items=[], total=101, current_page=1, per_page=20)
+        self.assertEqual(result.last_page, 6)
