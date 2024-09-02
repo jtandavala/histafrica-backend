@@ -190,3 +190,26 @@ class TestSearchParams(unittest.TestCase):
         for i in arrange:
             params = SearchParams(sort=i["sort"])
             self.assertEqual(params.sort, i["expected"], i)
+
+    def test_sort_dir_prop(self):
+        params = SearchParams()
+        self.assertIsNone(params.sort_dir)
+
+        params = SearchParams(sort=None)
+        self.assertIsNone(params.sort_dir)
+
+        arrange = [
+            {"sort_dir": None, "expected": "asc"},
+            {"sort_dir": "", "expected": "asc"},
+            {"sort_dir": "fake", "expected": "asc"},
+            {"sort_dir": 0, "expected": "asc"},
+            {"sort_dir": {}, "expected": "asc"},
+            {"sort_dir": "asc", "expected": "asc"},
+            {"sort_dir": "ASC", "expected": "asc"},
+            {"sort_dir": "desc", "expected": "desc"},
+            {"sort_dir": "DESC", "expected": "desc"},
+        ]
+
+        for i in arrange:
+            params = SearchParams(sort="name", sort_dir=i["sort_dir"])
+            self.assertEqual(params.sort_dir, i["expected"], i)
