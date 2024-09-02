@@ -169,3 +169,24 @@ class TestSearchParams(unittest.TestCase):
         for i in arrange:
             params = SearchParams(page=i["page"])
             self.assertEqual(params.page, i["expected"], i)
+
+    def test_sort_prop(self):
+        params = SearchParams()
+        self.assertIsNone(params.sort)
+
+        arrange = [
+            {"sort": None, "expected": None},
+            {"sort": "", "expected": None},
+            {"sort": "fake", "expected": "fake"},
+            {"sort": 0, "expected": "0"},
+            {"sort": -1, "expected": "-1"},
+            {"sort": "0", "expected": "0"},
+            {"sort": "-1", "expected": "-1"},
+            {"sort": 5.5, "expected": "5.5"},
+            {"sort": True, "expected": "True"},
+            {"sort": False, "expected": "False"},
+            {"sort": {}, "expected": "{}"},
+        ]
+        for i in arrange:
+            params = SearchParams(sort=i["sort"])
+            self.assertEqual(params.sort, i["expected"], i)
