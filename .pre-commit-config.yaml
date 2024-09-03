@@ -10,8 +10,3 @@ repos:
     rev: 6.1.0
     hooks:
     -   id: flake8
-
--   repo: https://github.com/PyCQA/isort
-    rev: 5.13.2
-    hooks:
-    -   id: isort

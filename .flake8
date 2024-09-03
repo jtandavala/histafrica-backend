@@ -5,3 +5,4 @@ max-line-length = 88
 exclude =
     src/**/migrations/*,
     src/framework/settings.py,
+    .venv/*
