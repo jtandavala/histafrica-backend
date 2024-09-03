@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Generic, Optional, TypeVar
+from typing import Generic, List, Optional, TypeVar
 
 Filter = TypeVar("Filter")
 
@@ -11,3 +11,15 @@ class SearchInput(Generic[Filter]):
     sort: Optional[str] = None
     sort_dir: Optional[str] = None
     filter: Optional[Filter] = None
+
+
+Item = TypeVar("Item")
+
+
+@dataclass(frozen=True, slots=True)
+class PaginationOutput(Generic[Item]):
+    items: List[Item]
+    total: int
+    current_page: int
+    per_page: int
+    last_page: int

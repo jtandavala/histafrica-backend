@@ -1,7 +1,12 @@
 import unittest
-from typing import Optional
+from typing import List, Optional
 
-from histafrica.shared.application.dto import Filter, SearchInput
+from histafrica.shared.application.dto import (
+    Filter,
+    Item,
+    PaginationOutput,
+    SearchInput,
+)
 
 
 class TestSearchInput(unittest.TestCase):
@@ -14,5 +19,20 @@ class TestSearchInput(unittest.TestCase):
                 "sort": Optional[str],
                 "sort_dir": Optional[str],
                 "filter": Optional[Filter],
+            },
+        )
+
+
+class TestPaginationOut(unittest.TestCase):
+
+    def test_fields(self):
+        self.assertEqual(
+            PaginationOutput.__annotations__,
+            {
+                "items": List[Item],
+                "total": int,
+                "per_page": int,
+                "current_page": int,
+                "last_page": int,
             },
         )
