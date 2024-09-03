@@ -8,6 +8,7 @@ from histafrica.shared.application.dto import (
     PaginationOutputMapper,
     SearchInput,
 )
+from histafrica.shared.domain.repository import SearchResult
 
 
 class TestSearchInput(unittest.TestCase):
@@ -50,3 +51,28 @@ class TestPaginationOutputMapper(unittest.TestCase):
 
         self.assertIsInstance(mapper, PaginationOutputMapper)
         self.assertTrue(issubclass(mapper.output_child, PaginationOutputChild))
+
+    def test_to_output(self):
+        result = SearchResult(
+            items=["fake"],
+            total=1,
+            current_page=1,
+            per_page=1,
+            sort="name",
+            sort_dir="asc",
+            filter="filter fake",
+        )
+
+        output = PaginationOutputMapper.from_child(PaginationOutputChild).to_output(
+            result.items, result=result
+        )
+        self.assertEqual(
+            output,
+            PaginationOutputChild(
+                items=result.items,
+                total=result.total,
+                current_page=result.current_page,
+                last_page=result.last_page,
+                per_page=result.per_page,
+            ),
+        )
