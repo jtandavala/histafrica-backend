@@ -16,3 +16,5 @@ docker-compose.override.yaml
 .docker/dbdata
 
 db.sqlite
+
+.env
