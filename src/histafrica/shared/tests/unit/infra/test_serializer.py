@@ -3,6 +3,7 @@ import unittest
 from rest_framework import serializers
 
 from histafrica.shared.infra.django_app.serializers import (
+    CollectionSerializer,
     PaginationSerializer,
     ResourceSerializer,
 )
@@ -27,3 +28,7 @@ class TestPaginationSerializer(unittest.TestCase):
 
 class StubSerializer(ResourceSerializer):
     name = serializers.CharField()
+
+
+class StubCollectionSerialer(CollectionSerializer):
+    child = StubSerializer()
