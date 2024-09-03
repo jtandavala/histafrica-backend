@@ -32,3 +32,17 @@ class CollectionSerializer(serializers.ListSerializer):
         else:
             raise TypeError("instance must be a PaginationOutput")
         super().__init__(**kwargs)
+
+    def to_representation(self, data):
+        return {
+            "data": [
+                # todo - verify if we have data or not
+                self.child.to_representation(item)["data"]
+                for item in data
+            ],
+            "meta": PaginationSerializer(self.pagination).data,
+        }
+
+    @property
+    def data(self):
+        return self.to_representation(self.instance)

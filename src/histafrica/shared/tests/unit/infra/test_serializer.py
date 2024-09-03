@@ -1,4 +1,5 @@
 import unittest
+from typing import OrderedDict
 
 from rest_framework import serializers
 
@@ -57,3 +58,23 @@ class TestCollectionSerializer(unittest.TestCase):
         )
         collection = StubCollectionSerializer(instance=pagination)
         self.assertEqual(collection.pagination, pagination)
+
+    def test_serialize(self):
+        pagination = PaginationOutput(
+            items=[{"name": "foo"}, {"name": "bar"}],
+            current_page="1",
+            per_page="2",
+            last_page="3",
+            total="4",
+        )
+        data = StubCollectionSerializer(instance=pagination).data
+        self.assertEqual(
+            data,
+            {
+                "data": [
+                    OrderedDict([("name", "foo")]),
+                    OrderedDict([("name", "bar")]),
+                ],
+                "meta": {"current_page": 1, "per_page": 2, "last_page": 3, "total": 4},
+            },
+        )
