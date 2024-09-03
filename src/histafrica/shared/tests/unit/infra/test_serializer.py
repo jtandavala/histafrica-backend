@@ -30,5 +30,22 @@ class StubSerializer(ResourceSerializer):
     name = serializers.CharField()
 
 
-class StubCollectionSerialer(CollectionSerializer):
+class StubCollectionSerializer(CollectionSerializer):
     child = StubSerializer()
+
+
+class TestCollectionSerializer(unittest.TestCase):
+
+    def test_if_throw_an_error_when_instance_is_not_pagination_output(self):
+        error_message = "instance must be a PaginationOutput"
+        with self.assertRaises(TypeError) as assert_error:
+            CollectionSerializer()
+        self.assertEqual(str(assert_error.exception), error_message)
+
+        with self.assertRaises(TypeError) as assert_error:
+            CollectionSerializer(instance={})
+        self.assertEqual(str(assert_error.exception), error_message)
+
+        with self.assertRaises(TypeError) as assert_error:
+            CollectionSerializer(instance=1)
+        self.assertEqual(str(assert_error.exception), error_message)

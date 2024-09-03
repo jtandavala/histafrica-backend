@@ -24,3 +24,11 @@ class ResourceSerializer(serializers.Serializer):
 class CollectionSerializer(serializers.ListSerializer):
     paginationOutput: PaginationOutput
     many = False
+
+    def __init__(self, instance: PaginationOutput = None, **kwargs):
+        if isinstance(instance, PaginationOutput):
+            kwargs["instance"] = instance.items
+            self.pagination = instance
+        else:
+            raise TypeError("instance must be a PaginationOutput")
+        super().__init__(**kwargs)
