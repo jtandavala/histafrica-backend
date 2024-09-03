@@ -5,6 +5,7 @@ from histafrica.shared.application.dto import (
     Filter,
     Item,
     PaginationOutput,
+    PaginationOutputMapper,
     SearchInput,
 )
 
@@ -36,3 +37,16 @@ class TestPaginationOut(unittest.TestCase):
                 "last_page": int,
             },
         )
+
+
+class PaginationOutputChild(PaginationOutput):
+    pass
+
+
+class TestPaginationOutputMapper(unittest.TestCase):
+
+    def test_from_child(self):
+        mapper = PaginationOutputMapper.from_child(PaginationOutputChild)
+
+        self.assertIsInstance(mapper, PaginationOutputMapper)
+        self.assertTrue(issubclass(mapper.output_child, PaginationOutputChild))
