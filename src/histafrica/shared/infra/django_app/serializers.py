@@ -10,3 +10,10 @@ class PaginationSerializer(serializers.Serializer):
     current_page = serializers.IntegerField()
     per_page = serializers.IntegerField()
     last_page = serializers.IntegerField()
+
+
+class ResourceSerializer(serializers.Serializer):
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        return {"data": data}
