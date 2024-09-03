@@ -25,14 +25,6 @@ pre-commit = "^3.8.0"
 pylint = "^3.2.6"
 poetry = "^1.8.3"
 
-[tool.isort]
-profile = "black"
-multi_line_output = 3
-include_trailing_comma = true
-force_grid_wrap = 0
-combine_as_imports = true
-line_length = 95
-
 [tool.poetry.scripts]
 manage = "src.framework.manage:main"
 runserver = "python src/framework/manage.py runserver"
