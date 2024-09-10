@@ -1,10 +1,11 @@
+from histafrica.shared.application.dto import PaginationOutput
 from rest_framework import serializers
 
-from histafrica.shared.application.dto import PaginationOutput
 
-
-class UUIDSerializer(serializers.Serializer):
+class AbstractSerializer(serializers.Serializer):
     id = serializers.UUIDField()
+    created = serializers.DateTimeField(read_only=True)
+    updated = serializers.DateTimeField(read_only=True)
 
 
 class PaginationSerializer(serializers.Serializer):

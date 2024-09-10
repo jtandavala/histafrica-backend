@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 
+
+from framework.config import config_service
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -20,10 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-5pel1c7(rt=h_ojis($%7%dj)a9%st+-)5tk#-9+75_t87ef$d"
+SECRET_KEY = config_service.secret_key
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config_service.debug
 
 ALLOWED_HOSTS = []
 
@@ -70,14 +73,19 @@ TEMPLATES = [
 WSGI_APPLICATION = "framework.wsgi.application"
 
 
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
+        **config_service.database_conn,
+        "TEST": config_service.database_conn,
+    },
+    "test_for_migrations": {
+        **config_service.database_conn,
+        "NAME": (
+            ":memory:"
+            if config_service.database_conn["ENGINE"] == "django.db.backends.sqlite3"
+            else "test_with_migrations"
+        ),
+    },
 }
 
 
@@ -87,7 +95,7 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",  # noqa: E501
     },
     {
         "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
