@@ -10,10 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
-import os
 from pathlib import Path
 
-from decouple import config
+
+from framework.config import config_service
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,10 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config("SECRET_KEY")
+SECRET_KEY = config_service.secret_key
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = int(config("DEBUG"))
+DEBUG = config_service.debug
 
 ALLOWED_HOSTS = []
 
@@ -73,18 +73,19 @@ TEMPLATES = [
 WSGI_APPLICATION = "framework.wsgi.application"
 
 
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": config("DB_NAME"),
-        "USER": config("DB_USER"),
-        "PASSWORD": config("DB_PASSWORD"),
-        "HOST": config("DB_HOST"),
-        "PORT": config("DB_PORT"),
-    }
+        **config_service.database_conn,
+        "TEST": config_service.database_conn,
+    },
+    "test_for_migrations": {
+        **config_service.database_conn,
+        "NAME": (
+            ":memory:"
+            if config_service.database_conn["ENGINE"] == "django.db.backends.sqlite3"
+            else "test_with_migrations"
+        ),
+    },
 }
 
 
@@ -94,7 +95,7 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",  # noqa: E501
     },
     {
         "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
