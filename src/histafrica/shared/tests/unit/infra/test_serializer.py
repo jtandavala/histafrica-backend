@@ -1,14 +1,13 @@
 import unittest
 from typing import OrderedDict
 
-from rest_framework import serializers
-
 from histafrica.shared.application.dto import PaginationOutput
 from histafrica.shared.infra.django_app.serializers import (
     CollectionSerializer,
     PaginationSerializer,
     ResourceSerializer,
 )
+from rest_framework import serializers
 
 
 class TestPaginationSerializer(unittest.TestCase):

@@ -1,6 +1,5 @@
-from rest_framework import serializers
-
 from histafrica.shared.application.dto import PaginationOutput
+from rest_framework import serializers
 
 
 class AbstractSerializer(serializers.Serializer):

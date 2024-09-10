@@ -2,10 +2,7 @@ import unittest
 from dataclasses import fields
 
 from histafrica.shared.domain.exceptions import ValidationException
-from histafrica.shared.domain.validators import (
-    ValidatorFieldsInterface,
-    ValidatorRules,
-)
+from histafrica.shared.domain.validators import ValidatorFieldsInterface, ValidatorRules
 
 
 class TestValidatorRules(unittest.TestCase):

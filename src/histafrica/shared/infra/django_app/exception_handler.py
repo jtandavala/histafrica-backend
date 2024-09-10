@@ -8,6 +8,7 @@ from rest_framework.views import exception_handler as rest_exception_handler
 
 
 def handle_serializer_validation_error(exception: ValidationError, context):
+
     response = rest_exception_handler(exception, context)
     response.status_code = 422
     return response
