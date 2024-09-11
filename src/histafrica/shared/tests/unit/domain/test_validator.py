@@ -1,8 +1,15 @@
 import unittest
+from unittest.mock import MagicMock, PropertyMock, patch
 from dataclasses import fields
 
+from rest_framework.serializers import Serializer
+
 from histafrica.shared.domain.exceptions import ValidationException
-from histafrica.shared.domain.validators import ValidatorFieldsInterface, ValidatorRules
+from histafrica.shared.domain.validators import (
+    ValidatorFieldsInterface,
+    ValidatorRules,
+    DRFValidator,
+)
 
 
 class TestValidatorRules(unittest.TestCase):
@@ -126,3 +133,24 @@ class TestValidatorFieldsInterface(unittest.TestCase):
         validated_data_field = fields_class[1]
         self.assertEqual(validated_data_field.name, "validated_data")
         self.assertIsNone(validated_data_field.default)
+
+
+class TestDRFValidator(unittest.TestCase):
+
+    @patch.object(Serializer, "is_valid", return_value=True)
+    @patch.object(
+        Serializer,
+        "validated_data",
+        return_value={"field": "value"},
+        new_callable=PropertyMock,
+    )
+    def test_if_validated_data_is_set(
+        self, mock_validated_data: PropertyMock, mock_is_valid: MagicMock
+    ):
+        validator = DRFValidator()
+        is_valid = validator.validate(Serializer())
+
+        self.assertTrue(is_valid)
+        self.assertEqual(validator.validated_data, {"field": "value"})
+        mock_validated_data.assert_called()
+        mock_is_valid.assert_called()

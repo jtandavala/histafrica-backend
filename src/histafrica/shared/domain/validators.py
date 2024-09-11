@@ -2,6 +2,8 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Any, Dict, Generic, List, TypeVar
 
+from rest_framework.serializers import Serializer
+
 from .exceptions import ValidationException
 
 ErrorFields = Dict[str, List[str]]
@@ -48,3 +50,16 @@ class ValidatorFieldsInterface(ABC, Generic[PropsValidated]):
     @abstractmethod
     def validate(self, data: Any) -> bool:
         raise NotImplementedError()
+
+
+class DRFValidator(ValidatorFieldsInterface[PropsValidated], ABC):
+    def validate(self, data: Serializer) -> bool:
+        serializer = data
+        if serializer.is_valid():
+            self.validated_data = dict(serializer.validated_data)
+            return True
+        self.errors = {
+            field: [str(_error) for _error in _errors]
+            for field, _errors in serializer.errors.items()
+        }
+        return False
