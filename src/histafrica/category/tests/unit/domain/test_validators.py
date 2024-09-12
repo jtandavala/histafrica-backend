@@ -40,3 +40,11 @@ class TestCategoryValidator(unittest.TestCase):
         for i in invalid_data:
             is_valid = self.validator.validate(i["data"])
             self.assertFalse(is_valid)
+
+    def test_invalidation_cases_for_description(self):
+        is_valid = self.validator.validate({"description": 5})
+
+        self.assertFalse(is_valid)
+        self.assertListEqual(
+            self.validator.errors["description"], ["Not a valid string."]
+        )
