@@ -1,6 +1,7 @@
 import os
 import unittest
 import django
+from django.conf import settings
 
 from histafrica.category.domain.validators import (
     CategoryValidator,
@@ -15,6 +16,7 @@ class TestCategoryValidator(unittest.TestCase):
     def setUpClass(cls) -> None:
         # Set the settings module for Django
         os.environ.setdefault("DJANGO_SETTINGS_MODULE", "framework.settings")
+        settings.EMAIL_BACKEND = "django.core.mail.backends.dummy.EmailBackend"
         django.setup()  # Initialize Django
         super().setUpClass()
 

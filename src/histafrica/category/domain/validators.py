@@ -5,7 +5,6 @@ from histafrica.shared.domain.validators import (
     StrictBooleanField,
     StrictCharField,
 )
-import logging
 
 
 class CategoryRules(serializers.Serializer):
@@ -17,8 +16,6 @@ class CategoryRules(serializers.Serializer):
 
 class CategoryValidator(DRFValidator):
     def validate(self, data: Dict) -> bool:
-        logger = logging.getLogger(__name__)
-        logger.info(f"Validating: {data}")  # is not display when run pytest
         rules = CategoryRules(data=data if data is not None else {})
         return super().validate(rules)
 
