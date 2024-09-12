@@ -31,6 +31,8 @@ isort = "^5.13.2"
 colorama = "^0.4.6"
 pytest-django = "^4.9.0"
 
+
+
 [tool.poetry.scripts]
 manage = "src.framework.manage:main"
 runserver = "python src/framework/manage.py runserver"
