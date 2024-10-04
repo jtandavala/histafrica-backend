@@ -1,9 +1,0 @@
-[flake8]
-max-line-length = 88
-ignore = F403, W503
-
-
-exclude =
-    src/**/migrations/*,
-    src/framework/settings.py,
-    .venv/*

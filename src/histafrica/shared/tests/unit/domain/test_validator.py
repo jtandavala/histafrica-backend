@@ -1,14 +1,14 @@
 import unittest
-from unittest.mock import MagicMock, PropertyMock, patch
 from dataclasses import fields
+from unittest.mock import MagicMock, PropertyMock, patch
 
 from rest_framework.serializers import Serializer
 
 from histafrica.shared.domain.exceptions import ValidationException
 from histafrica.shared.domain.validators import (
+    DRFValidator,
     ValidatorFieldsInterface,
     ValidatorRules,
-    DRFValidator,
 )
 
 

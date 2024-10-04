@@ -1,8 +1,9 @@
-from pytest import Parser, Config, Item, hoolkimpl
+import os
 from dataclasses import dataclass
 from typing import List
-import os
+
 from colorama import Fore, Style
+from pytest import Config, Item, Parser, hoolkimpl
 
 
 def pytest_addoption(parser: Parser):
@@ -66,8 +67,8 @@ class EnableMigration:
         if self.is_migrations_enabled:
             return
 
-        from django.core.management.commands import migrate
         from django.conf import settings
+        from django.core.management.commands import migrate
 
         settings.MIGRATION_MODULES = {}
         migrate.Command = MigrationCommandBackup

@@ -1,7 +1,4 @@
-import os
 import unittest
-import django
-from django.conf import settings
 
 from histafrica.category.domain.validators import (
     CategoryValidator,
@@ -11,14 +8,6 @@ from histafrica.category.domain.validators import (
 
 class TestCategoryValidator(unittest.TestCase):
     validator: CategoryValidator
-
-    @classmethod
-    def setUpClass(cls) -> None:
-        # Set the settings module for Django
-        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "framework.settings")
-        settings.EMAIL_BACKEND = "django.core.mail.backends.dummy.EmailBackend"
-        django.setup()  # Initialize Django
-        super().setUpClass()
 
     def setUp(self) -> None:
         self.validator = CategoryValidatorFactory.create()
@@ -40,3 +29,11 @@ class TestCategoryValidator(unittest.TestCase):
         for i in invalid_data:
             is_valid = self.validator.validate(i["data"])
             self.assertFalse(is_valid)
+
+    def test_invalidation_cases_for_description(self):
+        is_valid = self.validator.validate({"description": 5})
+
+        self.assertFalse(is_valid)
+        self.assertListEqual(
+            self.validator.errors["description"], ["Not a valid string."]
+        )

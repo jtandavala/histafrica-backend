@@ -1,7 +1,7 @@
-from datetime import datetime
 import unittest
-from unittest.mock import patch
 from dataclasses import is_dataclass
+from datetime import datetime
+from unittest.mock import patch
 
 from histafrica.category.domain.entity import Category
 

@@ -13,8 +13,6 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 
 
-from framework.config import config_service
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -23,10 +21,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config_service.secret_key
+SECRET_KEY = "django-insecure-rpf^_%&ln+27ii7v0q%2z*f)$a6!(v$2bm8_nnubnfq7b+(f%7"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config_service.debug
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -75,17 +73,9 @@ WSGI_APPLICATION = "framework.wsgi.application"
 
 DATABASES = {
     "default": {
-        **config_service.database_conn,
-        "TEST": config_service.database_conn,
-    },
-    "test_for_migrations": {
-        **config_service.database_conn,
-        "NAME": (
-            ":memory:"
-            if config_service.database_conn["ENGINE"] == "django.db.backends.sqlite3"
-            else "test_with_migrations"
-        ),
-    },
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    }
 }
 
 
