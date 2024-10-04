@@ -12,14 +12,6 @@ from histafrica.category.domain.validators import (
 class TestCategoryValidator(unittest.TestCase):
     validator: CategoryValidator
 
-    @classmethod
-    def setUpClass(cls) -> None:
-        # Set the settings module for Django
-        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "framework.settings")
-        settings.EMAIL_BACKEND = "django.core.mail.backends.dummy.EmailBackend"
-        django.setup()  # Initialize Django
-        super().setUpClass()
-
     def setUp(self) -> None:
         self.validator = CategoryValidatorFactory.create()
         return super().setUp()
