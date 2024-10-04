@@ -6,23 +6,24 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.11']
-        poetry-version: ['1.8.2']
+        python-version: ['3.10']
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
+      - uses: actions/checkout@v4
+      - name: Install Uv
+        uses: astral-sh/setup-uv@v3
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Run image
-        uses: abatilo/actions-poetry@v2.1.4
-        with:
-          poetry-version: ${{ matrix.poetry-version }}
+      - name: Setup Python
+        run: uv venv --python 3.10
+
       - name: Install dependencies
-        run: poetry install
+        run: uv sync --all-extras --dev
+
       - name: Run tests
-        run: poetry run pytest --cov=./ --cov-report=xml --junitxml=junit.xml
+        run: uv run pytest --cov=./ --cov-report=xml --junitxml=junit.xml
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
