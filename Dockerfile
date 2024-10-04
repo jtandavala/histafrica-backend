@@ -28,10 +28,12 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 COPY . .
 
 
-RUN uv sync --frozen --no-cache
+RUN uv venv --python 3.10 && \
+    uv sync --frozen --no-cache
 
 
 EXPOSE 8000
 
 
-CMD ["/app/.venv/bin/python", "src/manage.py", "runserver", "0.0.0.0:8000"]
+#CMD ["/app/.venv/bin/python", "src/manage.py", "runserver", "0.0.0.0:8000"]
+CMD [ "tail", "-f", "/dev/null" ]
