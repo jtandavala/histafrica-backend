@@ -1,12 +1,13 @@
+import os
 from pathlib import Path
 from typing import Dict
+
+import dj_database_url
+from pydantic import Field, field_validator
 from pydantic_settings import (
     BaseSettings,
     SettingsConfigDict,
 )  # Modern Pydantic settings
-from pydantic import Field, field_validator
-import os
-import dj_database_url
 
 # Define the path to the environment folder
 _ENV_FOLDER = Path(__file__).resolve().parent.parent.parent / "envs"

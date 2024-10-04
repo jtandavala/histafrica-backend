@@ -1,10 +1,11 @@
+from rest_framework.exceptions import ValidationError
+from rest_framework.response import Response
+from rest_framework.views import exception_handler as rest_exception_handler
+
 from histafrica.shared.domain.exceptions import (
     EntityValidationException,
     NotFoundException,
 )
-from rest_framework.exceptions import ValidationError
-from rest_framework.response import Response
-from rest_framework.views import exception_handler as rest_exception_handler
 
 
 def handle_serializer_validation_error(exception: ValidationError, context):

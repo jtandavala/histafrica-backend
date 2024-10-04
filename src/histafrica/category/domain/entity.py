@@ -1,6 +1,7 @@
 import datetime
-from typing import Optional
 from dataclasses import dataclass, field
+from typing import Optional
+
 from histafrica.shared.domain.entity import Entity
 
 

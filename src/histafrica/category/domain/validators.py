@@ -1,5 +1,7 @@
 from typing import Dict
+
 from rest_framework import serializers
+
 from histafrica.shared.domain.validators import (
     DRFValidator,
     StrictBooleanField,

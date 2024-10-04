@@ -1,7 +1,4 @@
-import os
 import unittest
-import django
-from django.conf import settings
 
 from histafrica.category.domain.validators import (
     CategoryValidator,

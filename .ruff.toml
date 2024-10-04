@@ -1,0 +1,6 @@
+line-length = 100
+fix = true
+
+[lint]
+ignore = ["F403"]
+extend-select = ["E501", "I001","I002"]
