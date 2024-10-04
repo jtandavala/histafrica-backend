@@ -32,7 +32,7 @@ class ConfigService(BaseSettings):
 
     @field_validator("database_conn", mode="before")
     def make_database_conn(cls, v, info):
-        return dj_database_url.config(default="sqlite:///:memory:")
+        return dj_database_url.config(default=info.data["database_dsn"])
 
     @field_validator("debug", mode="before")
     def parse_debug(cls, v):
