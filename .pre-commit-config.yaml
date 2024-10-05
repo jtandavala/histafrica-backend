@@ -5,5 +5,10 @@ repos:
       - id: ruff
         args: [--fix]
         exclude: '^(.*[\/])?\.venv[\/]'
+        language: system
+        types: [python]
+
       - id: ruff-format
         exclude: '^(.*[\/])?\.venv[\/]'
+        language: system
+        types: [python]
