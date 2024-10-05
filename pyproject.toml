@@ -24,4 +24,5 @@ dev-dependencies = [
     "pytest-cov>=5.0.0",
     "pytest-django>=4.9.0",
     "ruff>=0.6.8",
+    "commitizen>=3.29.1",
 ]

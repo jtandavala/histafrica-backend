@@ -7,7 +7,6 @@ from histafrica.shared.domain.entity import Entity
 
 @dataclass(kw_only=True, frozen=True, slots=True)
 class Category(Entity):
-
     name: str
     description: Optional[str] = None
     is_activate: Optional[bool] = True
