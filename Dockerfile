@@ -1,5 +1,14 @@
 FROM python:3.10-slim
 
+RUN apt update && apt install -y --no-install-recommends \
+                    default-jre \
+                    git \
+                    zsh \
+                    curl \
+                    wget \
+                    fonts-powerline \
+                    gcc \
+                    libmariadb-dev
 
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
 
@@ -21,6 +30,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 
 
 EXPOSE 8000
+
 
 
 ENTRYPOINT ["/app/entrypoint.sh"]
